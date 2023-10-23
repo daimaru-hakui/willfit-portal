@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import  { auth }  from '@firebase/server';
+import  { auth }  from '@/firebase/server';
 
 export const options: NextAuthOptions =({
   providers: [

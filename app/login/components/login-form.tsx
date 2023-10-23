@@ -60,7 +60,6 @@ const LoginForm: FC = () => {
           {...register('password', { required: true })}
         />
         <Button type='submit' color="blue" fullWidth>ログイン</Button>
-        <Button type='button' color="blue" fullWidth onClick={logout}>ログアウト</Button>
       </div>
     </form>
   );
