@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@firebase/*":["./firebase/*"]
+      "@firebase/*":["./lib/firebase/*"],
+      "@next-auth/*":["./lib/next-auth/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

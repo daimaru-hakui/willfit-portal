@@ -1,36 +1,61 @@
-'use client';
-import React, { FC } from 'react';
-import { Navbar, Button } from '../lib/material-tailwind';
-import { navList } from '@/utils/nav-list';
-import { signOut } from 'next-auth/react';
-import Link from 'next/link';
+"use client";
+import React, { FC } from "react";
+import { navList } from "@/utils/nav-list";
+import Link from "next/link";
+import { Flex, Text, Box, Button } from "@mantine/core";
+import HeaderMenu from "./header-menu";
+import HeaderDrawer from "./header-drawer";
 
 const NavBar: FC = () => {
-  const logout = async () => {
-    await signOut();
-  };
   return (
-    <Navbar className="sticky top-0 z-10 py-1 h-max max-w-full rounded-none shadow-sm">
-      <div className="flex items-center justify-between text-blue-gray-900">
-        <Link href="/dashboard" className="mr-4 cursor-pointer py-1.5 font-bold">
-          Willfit ポータルサイト
+    <Flex
+      w="100%"
+      h="50px"
+      justify="center"
+      pos="sticky"
+      top={0}
+      style={{ boxShadow: "1px 0 1px 1px rgba(0,0,0,10%)" }}
+    >
+      <Flex
+        py={6}
+        px={12}
+        align="center"
+        justify="space-between"
+        w="100%"
+        maw={1200}
+      >
+        <Link href="/dashboard" style={{ textDecorationLine: "none" }}>
+          <Text c="black" fw={700}>
+            ポータルサイト
+          </Text>
         </Link>
-        <div className="flex items-center gap-4">
-          <div className="mr-4 hidden lg:block places-items-center">{navList}</div>
-          <div className="flex items-center gap-x-1">
-            <Button
-              variant="gradient"
-              size="sm"
-              onClick={logout}
-              color='blue'
-              className='shadow-sm hover:shadow-md'
-            >
-              <span>logout</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Navbar>
+        <Flex align="center" gap={12}>
+          <Flex gap={12} display={{ base: "none", sm: "flex" }}>
+            {navList.map(({ title, path }, index) => (
+              <Box key={index}>
+                <Link
+                  href={`${path}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    className="hidden lg:inline-block px-2"
+                  >
+                    <span>{title}</span>
+                  </Button>
+                </Link>
+              </Box>
+            ))}
+          </Flex>
+          <Box display={{ base: "block", sm: "none" }}>
+            <HeaderDrawer />
+          </Box>
+          <HeaderMenu />
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
 

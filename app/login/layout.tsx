@@ -1,8 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
+import { Flex } from "@mantine/core";
 
-const LoginLayout = ({ children }: { children: ReactNode; }) => {
+const LoginLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className='grid place-items-center h-screen'>{children}</div>
+    <Flex justify="center" align="center" h="100vh" bg="gray">
+      {children}
+    </Flex>
   );
 };
 

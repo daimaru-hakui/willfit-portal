@@ -1,64 +1,69 @@
-'use client';
-import React, { FC } from 'react';
-import {
-  Typography,
-  Input,
-  Radio,
-  CardBody,
-  CardFooter,
-  Button,
-} from "@material-tailwind/react";
+"use client";
+import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@/firebase/client';
-import { format } from 'date-fns';
-import { useSession } from 'next-auth/react';
-
-type Inputs = {
-  alcoholCheck1: string;
-  alcoholCheck2: string;
-  alcoholCheckValue: number;
-};
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase/client";
+import { format } from "date-fns";
+import { useSession } from "next-auth/react";
+import { Box, Button, Radio, Flex, Stack } from "@mantine/core";
+import { AlcoholCheckInputs } from "@/type";
 
 interface Props {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  defaultValues: Inputs;
+  close: () => void;
+  defaultValues: AlcoholCheckInputs;
   pageType: "NEW" | "EDIT";
   postId?: string;
 }
 
-const AlcoholCheckForm: FC<Props> = ({ setOpen, defaultValues, pageType, postId }) => {
+const AlcoholCheckForm: FC<Props> = ({
+  close,
+  defaultValues,
+  pageType,
+  postId,
+}) => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const session = useSession();
   const currentUser = session.data?.user.uid;
-  const { register, handleSubmit } = useForm<Inputs>({
-    defaultValues
+  const { register, handleSubmit } = useForm<AlcoholCheckInputs>({
+    defaultValues,
   });
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<AlcoholCheckInputs> = async (data) => {
     switch (pageType) {
       case "NEW":
         await addAlcoholCheckList(data);
+        close();
         break;
       case "EDIT":
         await updateAlcoholCheckData(data);
+        close();
         break;
     }
-    setOpen(false);
   };
 
-  const addAlcoholCheckList = async (data: Inputs) => {
+  const addAlcoholCheckList = async (data: AlcoholCheckInputs) => {
+    const result = confirm("提出して宜しいでしょうか。");
+    if (!result) return;
     if (!currentUser) return;
     try {
       const docRef = doc(db, "alcoholCheckList", todayDate);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         await updateDoc(docRef, {
-          member: arrayUnion(currentUser)
+          member: arrayUnion(currentUser),
         });
       } else {
         await setDoc(docRef, {
           id: todayDate,
-          member: arrayUnion(currentUser)
+          member: arrayUnion(currentUser),
         });
       }
       await addAlcoholCheckData(data);
@@ -67,7 +72,7 @@ const AlcoholCheckForm: FC<Props> = ({ setOpen, defaultValues, pageType, postId 
     }
   };
 
-  const addAlcoholCheckData = async (data: Inputs) => {
+  const addAlcoholCheckData = async (data: AlcoholCheckInputs) => {
     await addDoc(collection(db, "alcoholCheckData"), {
       date: todayDate,
       uid: currentUser,
@@ -78,7 +83,7 @@ const AlcoholCheckForm: FC<Props> = ({ setOpen, defaultValues, pageType, postId 
     });
   };
 
-  const updateAlcoholCheckData = async (data: Inputs) => {
+  const updateAlcoholCheckData = async (data: AlcoholCheckInputs) => {
     if (!postId) return;
     const docRef = doc(db, "alcoholCheckData", postId);
     updateDoc(docRef, {
@@ -95,83 +100,63 @@ const AlcoholCheckForm: FC<Props> = ({ setOpen, defaultValues, pageType, postId 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <CardBody className="flex flex-col gap-4">
-        <Typography variant="h4" color="blue-gray">
-          アルコールチェック
-        </Typography>
-        <div>
-          <Typography
-            className="font-normal"
-            variant="paragraph"
-            color="gray"
-          >
-            アルコールの検査はしましたか？
-          </Typography>
-          <div className="flex gap-6">
+      <Stack gap={24}>
+        <Stack gap={6}>
+          アルコールの検査はしましたか？
+          <Flex gap={12}>
             <Radio
               label="No"
-              crossOrigin={undefined}
-              {...register('alcoholCheck1')}
+              value="0"
+              color="red"
+              {...register("alcoholCheck1")}
             />
             <Radio
               label="Yes"
+              value="1"
               defaultChecked
-              crossOrigin={undefined}
-              {...register('alcoholCheck1')}
+              {...register("alcoholCheck1")}
             />
-          </div>
-        </div>
-        <div>
-          <Typography
-            className="font-normal"
-            variant="paragraph"
-            color="gray"
-          >
-            酒気帯び
-          </Typography>
-          <div className="flex gap-6">
+          </Flex>
+        </Stack>
+        <Stack gap={6}>
+          <Box>酒気帯び</Box>
+          <Flex gap={12}>
             <Radio
               label="有"
-              crossOrigin={undefined}
-              {...register('alcoholCheck2')}
+              value="0"
+              color="red"
+              {...register("alcoholCheck2")}
             />
             <Radio
               label="無"
+              value="1"
               defaultChecked
-              crossOrigin={undefined}
-              {...register('alcoholCheck2')}
+              {...register("alcoholCheck2")}
             />
-          </div>
-        </div>
-        <div>
-          <Typography
-            className="font-normal"
-            variant="paragraph"
-            color="gray"
-          >
-            測定結果（mg）
-          </Typography>
-          <div className="flex gap-6">
-            <Input type='number'
-              step='0.01'
-              min='0'
-              defaultValue={0}
-              className="!border !border-gray-300 bg-white text-gray-900 shadow-sm shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-gray-900"
-              labelProps={{
-                className: "hidden"
-              }}
-              crossOrigin={undefined}
-              onFocus={focusHandler}
-            />
-          </div>
-        </div>
-      </CardBody>
-      <CardFooter className="pt-0">
-        <Button variant="gradient" onClick={() => setOpen(false)} fullWidth>
-          {pageType === 'NEW' ? "提出する" : "更新する"}
+          </Flex>
+        </Stack>
+        <Stack gap={6}>
+          <Box>測定結果（mg）</Box>
+
+          <input
+            type="number"
+            defaultValue={0}
+            {...register("alcoholCheckValue", {
+              required: true,
+              max: 10,
+              min: 0,
+            })}
+            onFocus={focusHandler}
+          />
+        </Stack>
+        <Button
+          type="submit"
+          fullWidth
+        >
+          {pageType === "NEW" ? "提出する" : "更新する"}
         </Button>
-      </CardFooter>
-    </form >
+      </Stack>
+    </form>
   );
 };
 
