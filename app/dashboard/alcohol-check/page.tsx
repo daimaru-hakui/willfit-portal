@@ -1,9 +1,14 @@
-import React from 'react'
-
+import React from "react";
+import AlcoholCheckTable from "./components/alcohol-check-table";
+import { Container, Paper } from "@mantine/core";
 const AlcoholCheckPage = () => {
   return (
-    <div>AlcoholCheckPage</div>
-  )
-}
+    <Container w={400}>
+      <Paper shadow="xs" p="xl" bg="white">
+        <AlcoholCheckTable />
+      </Paper>
+    </Container>
+  );
+};
 
-export default AlcoholCheckPage
+export default AlcoholCheckPage;

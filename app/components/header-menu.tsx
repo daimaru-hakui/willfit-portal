@@ -2,6 +2,7 @@ import { Menu, Button, rem } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import { GrLogout } from "react-icons/gr";
 import { AiOutlineHome, AiOutlineMenu } from "react-icons/ai";
+import { PiBeerSteinBold } from "react-icons/pi";
 import Link from "next/link";
 
 const HeaderMenu = () => {
@@ -25,6 +26,15 @@ const HeaderMenu = () => {
             }
           >
             ホーム
+          </Menu.Item>
+        </Link>
+        <Link href="/dashboard/alcohol-check" style={{ textDecorationLine: "none" }}>
+          <Menu.Item
+            leftSection={
+              <PiBeerSteinBold style={{ width: rem(14), height: rem(14) }} />
+            }
+          >
+            アルコールチェック
           </Menu.Item>
         </Link>
         <Menu.Divider />
