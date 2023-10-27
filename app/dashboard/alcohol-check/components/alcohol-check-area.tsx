@@ -36,10 +36,9 @@ const AlcoholCheckArea: FC = () => {
           mt={12}
           p={12}
           w="100%"
-          maw={600}
           gap={12}
           align="center"
-          justify="space-between"
+          justify="space-around"
           bg="white"
         >
           <Box>アルコールチェックをしてください</Box>

@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { navList } from "@/utils/nav-list";
 import Link from "next/link";
 import { Flex, Text, Box, Button } from "@mantine/core";
@@ -7,15 +7,9 @@ import HeaderMenu from "./header-menu";
 import HeaderDrawer from "./header-drawer";
 
 const NavBar: FC = () => {
+
   return (
-    <Flex
-      w="100%"
-      h="50px"
-      justify="center"
-      pos="sticky"
-      top={0}
-      style={{ boxShadow: "1px 0 1px 1px rgba(0,0,0,10%)" }}
-    >
+    <Flex w="100%" h="50px" justify="center">
       <Flex
         py={6}
         px={12}

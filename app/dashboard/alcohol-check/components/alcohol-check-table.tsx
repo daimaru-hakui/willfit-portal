@@ -28,15 +28,13 @@ const AlcoholCheckTable = () => {
   useEffect(() => {
     const getAlcoholCheckList = async () => {
       const collectionRef = collection(db, "alcoholCheckList");
-      const q = query(collectionRef, orderBy("id", "desc"), limit(10));
+      const q = query(collectionRef, orderBy("id", "desc"), limit(30));
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setAlcoholChecks(data);
     };
     getAlcoholCheckList();
   }, []);
-
-  console.log(totalCount);
 
   return (
     <Table>

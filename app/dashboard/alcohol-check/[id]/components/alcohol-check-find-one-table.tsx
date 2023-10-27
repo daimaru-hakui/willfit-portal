@@ -1,11 +1,53 @@
 "use client";
 import { Button, Table } from "@mantine/core";
-import React from "react";
+import React, { FC, useEffect, useState } from "react";
 import AlcoholCheckFindOneTableRow from "./alcohol-check-find-one-table-row";
+import { useParams } from "next/navigation";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase/client";
+import { AlcoholCheck } from "@/type";
 
-const AlcoholCheckFindOneTable = () => {
+const AlcoholCheckFindOneTable: FC = () => {
+  const { id }:{id:string}= useParams();
+  const [alcoholChecks, setAlcoholChecks] = useState<AlcoholCheck[]>([]);
+  const [users, setUsers] = useState<any>([]);
+
+  useEffect(() => {
+    if (!id) return;
+    const coll = collection(db, "alcoholCheckData");
+    const q = query(
+      coll,
+      where("date", "==", id),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (snapshot) =>
+      setAlcoholChecks(
+        snapshot.docs.map(
+          (doc) => ({ ...doc.data(), id: doc.id } as AlcoholCheck)
+        )
+      )
+    );
+  }, [id]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const usersRef = collection(db, "authority");
+      const docSnap = await getDocs(usersRef);
+      setUsers(docSnap.docs.map((doc) => ({ ...doc.data() })));
+    };
+    getUsers();
+  }, []);
+
   return (
-    <Table>
+    <Table w="100%">
       <Table.Thead>
         <Table.Tr>
           <Table.Th>名前</Table.Th>
@@ -18,7 +60,13 @@ const AlcoholCheckFindOneTable = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        <AlcoholCheckFindOneTableRow />
+        {alcoholChecks.map((alcoholCheck) => (
+          <AlcoholCheckFindOneTableRow
+            key={alcoholCheck.id}
+            alcoholCheck={alcoholCheck}
+            users={users}
+          />
+        ))}
       </Table.Tbody>
     </Table>
   );

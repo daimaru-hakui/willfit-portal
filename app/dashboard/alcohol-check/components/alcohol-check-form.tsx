@@ -21,7 +21,7 @@ interface Props {
   close: () => void;
   defaultValues: AlcoholCheckInputs;
   pageType: "NEW" | "EDIT";
-  postId?: string;
+  postId?: string ;
 }
 
 const AlcoholCheckForm: FC<Props> = ({
@@ -85,7 +85,7 @@ const AlcoholCheckForm: FC<Props> = ({
 
   const updateAlcoholCheckData = async (data: AlcoholCheckInputs) => {
     if (!postId) return;
-    const docRef = doc(db, "alcoholCheckData", postId);
+    const docRef = doc(db, "alcoholCheckData", `${postId}`);
     updateDoc(docRef, {
       alcoholCheck1: data.alcoholCheck1,
       alcoholCheck2: data.alcoholCheck2,
