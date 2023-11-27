@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { navList } from "@/utils/nav-list";
 import Link from "next/link";
 import { Flex, Text, Box, Button } from "@mantine/core";
@@ -7,7 +7,6 @@ import HeaderMenu from "./header-menu";
 import HeaderDrawer from "./header-drawer";
 
 const NavBar: FC = () => {
-
   return (
     <Flex w="100%" h="50px" justify="center">
       <Flex
@@ -25,12 +24,12 @@ const NavBar: FC = () => {
         </Link>
         <Flex align="center" gap={12}>
           <Flex gap={12} display={{ base: "none", sm: "flex" }}>
-            {navList.map(({ title, path }, index) => (
+            {navList.map(({ title, path, target }, index) => (
               <Box key={index}>
                 <Link
                   href={`${path}`}
                   rel="noopener noreferrer"
-                  target="_blank"
+                  target={target ? "_blank" : "_self"}
                 >
                   <Button
                     variant="outline"
