@@ -8,6 +8,10 @@ import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const theme = {
+  primaryColor: 'cyan',
+};
+
 export const metadata: Metadata = {
   title: "Willfit ポータルサイト",
   description: "Willfit ポータルサイト",
@@ -25,7 +29,7 @@ export default function RootLayout({
       </head>
       <html lang="ja">
         <body>
-          <MantineProvider>{children}</MantineProvider>
+          <MantineProvider theme={theme}>{children}</MantineProvider>
         </body>
       </html>
     </SessionProvider>
