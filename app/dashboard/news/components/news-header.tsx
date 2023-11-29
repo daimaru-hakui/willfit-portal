@@ -6,10 +6,12 @@ import React from "react";
 
 const NewsHeader = () => {
   const pathname = usePathname();
-  console.log(pathname)
+  console.log(pathname);
   return (
     <Flex justify="space-between">
-      <Title order={2}>{pathname === "/dashboard" ? "NEWS" : "NEWS一覧"}</Title>
+      <Title order={2}>
+        {pathname === "/dashboard" ? "お知らせ" : "お知らせ一覧"}
+      </Title>
       <Flex gap="xs">
         {pathname === "/dashboard" ? (
           <Link href="/dashboard/news">
