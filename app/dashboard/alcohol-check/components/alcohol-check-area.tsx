@@ -1,6 +1,6 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Paper } from "@mantine/core";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { format } from "date-fns";
@@ -32,18 +32,18 @@ const AlcoholCheckArea: FC = () => {
   return (
     <>
       {!isAlcoholCheck && (
-        <Flex
-          mt={12}
-          p={12}
-          w="100%"
-          gap={12}
-          align="center"
-          justify="space-around"
-          bg="white"
-        >
-          <Box>アルコールチェックをしてください</Box>
-          <AlcoholCheckModal defaultValues={defaultValues} />
-        </Flex>
+        <Paper shadow="sm" radius="sm" mt="md" mb="md" p="md">
+          <Flex
+            w="100%"
+            gap="md"
+            align="center"
+            justify="space-around"
+            bg="white"
+          >
+            <Box>アルコールチェックをしてください</Box>
+            <AlcoholCheckModal defaultValues={defaultValues} />
+          </Flex>
+        </Paper>
       )}
     </>
   );

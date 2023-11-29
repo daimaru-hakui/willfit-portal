@@ -58,3 +58,15 @@ export type Calendar = {
     height: number;
   };
 };
+
+export type News = {
+  id: string;
+  postDate: string;
+  title: string;
+  content: string;
+  createdAt: any;
+  cratedBy: {
+    ref: string;
+    user:any
+  };
+};

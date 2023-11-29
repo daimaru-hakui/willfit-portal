@@ -1,11 +1,14 @@
-import { options } from "@/lib/next-auth/options";
-import { getServerSession } from "next-auth/next";
 import AlcoholCheckArea from "./alcohol-check/components/alcohol-check-area";
-import { Box, Flex } from "@mantine/core";
+import { Container } from "@mantine/core";
+import NewsArea from "./news/components/news-area";
 
 const Dashboard = async () => {
-  const session = await getServerSession(options);
-  return <AlcoholCheckArea />;
+  return (
+    <Container w="100%" maw={900}>
+      <AlcoholCheckArea />
+      <NewsArea/>
+    </Container>
+  );
 };
 
 export default Dashboard;

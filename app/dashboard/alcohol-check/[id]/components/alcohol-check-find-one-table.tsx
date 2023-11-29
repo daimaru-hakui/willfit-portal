@@ -13,12 +13,12 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
-import { AlcoholCheck } from "@/type";
+import { AlcoholCheck, User } from "@/type";
 
 const AlcoholCheckFindOneTable: FC = () => {
   const { id }:{id:string}= useParams();
   const [alcoholChecks, setAlcoholChecks] = useState<AlcoholCheck[]>([]);
-  const [users, setUsers] = useState<any>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -41,7 +41,7 @@ const AlcoholCheckFindOneTable: FC = () => {
     const getUsers = async () => {
       const usersRef = collection(db, "authority");
       const docSnap = await getDocs(usersRef);
-      setUsers(docSnap.docs.map((doc) => ({ ...doc.data() })));
+      setUsers(docSnap.docs.map((doc) => ({ ...doc.data() } as User)));
     };
     getUsers();
   }, []);
