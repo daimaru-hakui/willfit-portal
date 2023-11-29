@@ -4,7 +4,7 @@ import { Paper } from "@mantine/core";
 
 const AlcoholCheckId = () => {
   return (
-    <Paper p={12} shadow="md">
+    <Paper p={12} shadow="md" maw={700} mx="auto">
       <AlcoholCheckFindOneTable />
     </Paper>
   );

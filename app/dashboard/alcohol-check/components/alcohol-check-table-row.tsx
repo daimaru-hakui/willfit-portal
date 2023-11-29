@@ -13,7 +13,7 @@ const AlcoholCheckTableRow:FC<Props> = ({alcoholCheck}) => {
       <Table.Td>{alcoholCheck.member.length}人</Table.Td>
       <Table.Td>
         <Link href={`/dashboard/alcohol-check/${alcoholCheck.id}`}>
-        <Button>詳細</Button>
+        <Button size="xs">詳細</Button>
         </Link>
       </Table.Td>
     </Table.Tr>

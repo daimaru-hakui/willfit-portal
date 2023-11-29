@@ -24,7 +24,7 @@ const AlcoholCheckFindOneModal: FC<Props> = ({ defaultValues, postId }) => {
         />
       </Modal>
 
-      <Button onClick={open}>編集</Button>
+      <Button size="xs" onClick={open}>編集</Button>
     </>
   );
 };
