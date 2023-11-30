@@ -1,21 +1,16 @@
-"use client"
-import { Flex, Paper } from "@mantine/core";
+"use client";
+import { Paper } from "@mantine/core";
 import React, { FC } from "react";
 import NewsTable from "./news-table";
 import NewsHeader from "./news-header";
-import { usePathname } from "next/navigation";
-import NewsToppageTable from "./news-toppage-table";
+import { useStore } from "@/store";
 
 const NewsArea: FC = () => {
-  const pathname = usePathname()
+  const newsList = useStore((state) => state.newsList);
   return (
     <Paper shadow="sm" p="md">
-      <NewsHeader />
-      {pathname === "/dashboard" ? (
-        <NewsToppageTable />
-        ):(
-        <NewsTable />
-      )}
+        <NewsHeader />
+        {newsList.length > 0 && <NewsTable />}
     </Paper>
   );
 };

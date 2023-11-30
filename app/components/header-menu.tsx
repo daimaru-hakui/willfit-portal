@@ -61,6 +61,18 @@ const HeaderMenu = () => {
             アルコールチェック
           </Menu.Item>
         </Link>
+        <Link
+          href="/dashboard/news"
+          style={{ textDecorationLine: "none" }}
+        >
+          <Menu.Item
+            leftSection={
+              <PiBeerSteinBold style={{ width: rem(14), height: rem(14) }} />
+            }
+          >
+            お知らせ一覧
+          </Menu.Item>
+        </Link>
         <Menu.Divider />
         <Menu.Item
           onClick={logout}

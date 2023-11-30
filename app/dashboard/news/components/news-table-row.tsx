@@ -6,9 +6,10 @@ import React, { FC } from "react";
 import NewsEditModal from "./news-edit-modal";
 import { AiOutlineDelete } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
+import { db, storage } from "@/lib/firebase/client";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { deleteObject, ref } from "firebase/storage";
 
 interface Props {
   news: News & { user: User };
@@ -33,10 +34,19 @@ const NewsTableRow: FC<Props> = ({ news }) => {
     const docRef = doc(db, "willfitNews", `${id}`);
     try {
       await deleteDoc(docRef);
+      if(news.images.length === 0) return
+      for (let { imagePath } of news?.images) {
+        await deleteImage(imagePath);
+      }
     } catch (err) {
       console.error(err);
       alert("削除に失敗しました");
     }
+  };
+
+  const deleteImage = async (path: string) => {
+    const desertRef = ref(storage, path);
+    await deleteObject(desertRef);
   };
 
   return (

@@ -3,6 +3,7 @@ import { db } from "@/lib/firebase/client";
 import { News, User } from "@/type";
 import { Box, Button, Flex, Paper, Stack, Title } from "@mantine/core";
 import { doc, getDoc } from "firebase/firestore";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
@@ -57,6 +58,17 @@ const NewsFindByIdArea: FC = () => {
             {news?.content}
           </Box>
         </Box>
+        {news?.images?.map((image) => (
+          <Box key={image.imageUrl}>
+            <Image
+              src={image.imageUrl}
+              width={200}
+              height={200}
+              alt=""
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Box>
+        ))}
         <Flex align="center" justify="flex-end" gap="sm">
           <Box fz="sm">作成者</Box>
           <Box>{news?.user?.name}</Box>

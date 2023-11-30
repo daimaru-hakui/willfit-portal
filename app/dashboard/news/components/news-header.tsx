@@ -6,7 +6,6 @@ import React from "react";
 
 const NewsHeader = () => {
   const pathname = usePathname();
-  console.log(pathname);
   return (
     <Flex justify="space-between">
       <Title order={2}>

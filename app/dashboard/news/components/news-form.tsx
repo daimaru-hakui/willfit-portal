@@ -1,6 +1,7 @@
 "use client";
 import { db, storage } from "@/lib/firebase/client";
 import { useStore } from "@/store";
+import { News } from "@/type";
 import {
   Box,
   Button,
@@ -12,13 +13,19 @@ import {
 } from "@mantine/core";
 import {
   addDoc,
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,9 +45,10 @@ interface Props {
   pageType: "NEW" | "EDIT";
   defaultValues: Inputs;
   close?: () => void;
+  news?: News;
 }
 
-const NewsForm: FC<Props> = ({ pageType, defaultValues, close }) => {
+const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
   const session = useSession();
   const router = useRouter();
   const setIsLoading = useStore((state) => state.setIsLoading);
@@ -76,7 +84,7 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close }) => {
         return;
       case "EDIT":
         await updateNews(data);
-        close && close();
+        close!();
         return;
     }
   };
@@ -116,6 +124,7 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close }) => {
         content: data.content,
         updatedAt: serverTimestamp(),
       });
+      addImage(data.id);
     } catch (err) {
       console.error(err);
       alert("更新を失敗しました");
@@ -125,45 +134,100 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close }) => {
   };
 
   const addImage = async (id: string) => {
-    if (fileUpload?.length === 0) return;
-    fileUpload?.forEach((file) => {
+    if (fileUpload?.length === 0 || !fileUpload) return;
+    for (let file of fileUpload) {
       const fileName = file.name;
       const storageRef = ref(storage, `willfit-images/news/${id}/${fileName}`);
-      uploadBytes(storageRef, file).then(async () => {
-        const url = await getDownloadURL(storageRef);
-        const docRef = doc(db, "willfitNews", id);
-        updateDoc(docRef, {
-          images: arrayUnion({
-            imageUrl: url,
-            imagePath: storageRef.fullPath,
-          }),
-        });
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      const docRef = doc(db, "willfitNews", id);
+      updateDoc(docRef, {
+        images: arrayUnion({
+          imageUrl: url,
+          imagePath: storageRef.fullPath,
+        }),
       });
-    });
+    }
+  };
+
+  const removeImage = (path: string, idx: number) => {
+    const result = confirm("削除して宜しいでしょうか");
+    if (!result) return;
+    const newImages = news?.images.filter((_, index) => index !== idx);
+    const docRef = doc(db, "willfitNews", `${news?.id}`);
+    const desertRef = ref(storage, path);
+    deleteObject(desertRef)
+      .then(() => {
+        updateDoc(docRef, {
+          images: newImages,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack gap={24}>
         <Flex align="center" justify="space-between">
-          <Title order={2}>
-            {pageType === "NEW" ? "投稿する" : "編集する"}
-          </Title>
-          <Link href="/dashboard/news">
-            <Button size="xs" variant="outline">
-              一覧へ
-            </Button>
-          </Link>
+          {pageType === "NEW" ? (
+            <>
+              <Title order={2}>投稿する</Title>
+              <Link href="/dashboard/news">
+                <Button size="xs" variant="outline">
+                  一覧へ
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <Title order={2}>編集する</Title>
+          )}
         </Flex>
         <Stack gap="md">
           <TextInput label="日付" type="date" {...register("postDate")} />
           <TextInput label="タイトル" {...register("title")} />
           <Textarea label="内容" {...register("content")} autosize></Textarea>
+
+          {news?.images?.map((image, idx) => (
+            <Box key={image.imageUrl} pos="relative">
+              <Image
+                src={image.imageUrl}
+                width={200}
+                height={200}
+                alt=""
+                style={{ width: "100%", height: "auto" }}
+              />
+              <IoCloseCircle
+                style={{
+                  position: "absolute",
+                  top: "-10px",
+                  right: "-10px",
+                  cursor: "pointer",
+                  fontSize: 30,
+                  backgroundColor: "white",
+                  borderRadius: "50%",
+                }}
+                onClick={() => removeImage(image.imagePath, idx)}
+              />
+            </Box>
+          ))}
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFile}
+            style={{ display: "none" }}
+          />
+          <Button mx="auto" color="gray" w="150px" onClick={handleClick}>
+            {pageType === "NEW" ? "画像を選択" : "画像を追加"}
+          </Button>
           <Box>
             {fileUpload &&
               fileUpload.length >= 1 &&
               fileUpload.map((file, idx) => (
-                <Box key={file.name} pos="relative" mt="md">
+                <Box key={file.name} pos="relative" mt="sm" mb="md">
                   <Image
                     src={URL.createObjectURL(file)}
                     alt={file.name}
@@ -186,17 +250,6 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close }) => {
                 </Box>
               ))}
           </Box>
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFile}
-            style={{ display: "none" }}
-          />
-          <Button mx="auto" color="gray" w="150px" onClick={handleClick}>
-            画像を選択
-          </Button>
         </Stack>
         <Button type="submit" fullWidth>
           {pageType === "NEW" ? "投稿する" : "更新する"}

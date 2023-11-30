@@ -69,4 +69,8 @@ export type News = {
     ref: string;
     user:any
   };
+  images:{
+    imageUrl:string;
+    imagePath:string;
+  }[]
 };

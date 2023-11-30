@@ -24,7 +24,7 @@ const NewsEditModal: FC<Props> = ({ news }) => {
   return (
     <>
       <Modal opened={opened} onClose={close} title="編集">
-        <NewsForm defaultValues={defaultValues} pageType="EDIT" close={close} />
+        <NewsForm defaultValues={defaultValues} pageType="EDIT" close={close} news={news} />
       </Modal>
       <AiOutlineEdit
         variant="outline"
