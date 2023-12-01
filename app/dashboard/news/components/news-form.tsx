@@ -189,12 +189,19 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
         <Stack gap="md">
           <TextInput label="日付" type="date" {...register("postDate")} />
           <TextInput label="タイトル" {...register("title")} />
-          <Textarea label="内容" {...register("content")} autosize minRows={5}></Textarea>
+          <Textarea
+            label="内容"
+            {...register("content")}
+            autosize
+            minRows={5}
+          ></Textarea>
 
           {news?.images?.map((image, idx) => (
             <Box key={image.url} pos="relative">
               {image.type === "application/pdf" ? (
-                <Box>{image.name}</Box>
+                <>
+                  <Box w="100%">{image.name}</Box>
+                </>
               ) : (
                 <Image
                   src={image.url}
@@ -245,20 +252,20 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
                         height={300}
                         style={{ width: "100%", height: "auto" }}
                       />
-                      <IoCloseCircle
-                        style={{
-                          position: "absolute",
-                          top: "-10px",
-                          right: "-10px",
-                          cursor: "pointer",
-                          fontSize: 30,
-                          backgroundColor: "white",
-                          borderRadius: "50%",
-                        }}
-                        onClick={() => previewDelete(idx)}
-                      />
                     </>
                   )}
+                  <IoCloseCircle
+                    style={{
+                      position: "absolute",
+                      top: "-10px",
+                      right: "-10px",
+                      cursor: "pointer",
+                      fontSize: 30,
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                    }}
+                    onClick={() => previewDelete(idx)}
+                  />
                 </Box>
               ))}
           </Box>
