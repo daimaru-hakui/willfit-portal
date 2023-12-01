@@ -47,10 +47,10 @@ const NewsToppageArea: FC = () => {
   return (
     <>
       {newsList.length > 0 && (
-        <Paper shadow="sm" p="md">
+        <>
           <NewsHeader />
           <NewsToppageTable newsList={newsList} />
-        </Paper>
+        </>
       )}
     </>
   );

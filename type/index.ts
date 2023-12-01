@@ -67,7 +67,6 @@ export type News = {
   createdAt: any;
   cratedBy: {
     ref: string;
-    user: any;
   };
   images: {
     url: string;
@@ -75,4 +74,15 @@ export type News = {
     type: string;
     name: string;
   }[];
+};
+
+export type QuickAccessLink = {
+  id: string;
+  title: string;
+  link: string;
+  category: string;
+  createBy: {
+    ref: string;
+  };
+  createdAt: any;
 };

@@ -39,9 +39,9 @@ const AlcoholCheckArea: FC = () => {
             align="center"
             justify="space-around"
             bg="white"
-            direction={{base:"column",md:"row"}}
+            direction={{ base: "column", md: "row" }}
           >
-            <Box>アルコールチェックをしてください</Box>
+            <Box fw="bold">アルコールチェックをしてください</Box>
             <AlcoholCheckModal defaultValues={defaultValues} />
           </Flex>
         </Paper>

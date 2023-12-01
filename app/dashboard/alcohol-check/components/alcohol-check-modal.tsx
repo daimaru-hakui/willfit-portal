@@ -13,7 +13,7 @@ const AlcoholCheckModal:FC<Props> = ({defaultValues}) => {
   
   return (
     <>
-      <Button onClick={open}>アルコールチェック</Button>
+      <Button w="100%" maw={350} onClick={open}>アルコールチェック</Button>
       <Modal opened={opened} onClose={close} title="アルコールチェック">
         <AlcoholCheckForm
           close={close}

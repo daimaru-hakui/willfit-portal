@@ -1,37 +1,29 @@
 "use client";
-import { db, storage } from "@/lib/firebase/client";
+import { db } from "@/lib/firebase/client";
 import { useStore } from "@/store";
 import { News } from "@/type";
+import { quickAccessCategoryList } from "@/utils/quick-access-category-list";
 import {
   Box,
   Button,
   Flex,
   Stack,
   TextInput,
-  Textarea,
   Title,
+  Select,
 } from "@mantine/core";
 import {
   addDoc,
-  arrayUnion,
   collection,
   doc,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { FC, useState, useRef } from "react";
+import React, { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { IoCloseCircle } from "react-icons/io5";
 
 type Inputs = {
   id: string;
@@ -44,15 +36,9 @@ interface Props {
   pageType: "NEW" | "EDIT";
   defaultValues: Inputs;
   close?: () => void;
-  news?: News;
 }
 
-const QuickAccessForm: FC<Props> = ({
-  pageType,
-  defaultValues,
-  close,
-  news,
-}) => {
+const QuickAccessForm: FC<Props> = ({ pageType, defaultValues, close }) => {
   const session = useSession();
   const router = useRouter();
   const setIsLoading = useStore((state) => state.setIsLoading);
@@ -60,6 +46,9 @@ const QuickAccessForm: FC<Props> = ({
   const {
     register,
     handleSubmit,
+    setValue,
+    getValues,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues,
@@ -67,30 +56,35 @@ const QuickAccessForm: FC<Props> = ({
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     switch (pageType) {
       case "NEW":
-        await addNews(data);
+        await addQuickAccess(data);
         return;
       case "EDIT":
-        await updateNews(data);
+        await updateQuickAccess(data);
         close!();
         return;
     }
   };
 
-  const addNews = async (data: Inputs) => {
-    const newsRef = collection(db, "willfitNews");
+  const handleSelectChange = (e: string | null) => {
+    const value = e ? e : "";
+    setValue("category", value);
+  };
+
+  const addQuickAccess = async (data: Inputs) => {
+    const newsRef = collection(db, "willfitQuickAccessLinks");
     const userRef = doc(db, "authority", `${session.data?.user.uid}`);
     setIsLoading(true);
     try {
-      const doc = await addDoc(newsRef, {
+      await addDoc(newsRef, {
+        category: data.category,
         title: data.title,
-
+        link: data.link,
         createdAt: serverTimestamp(),
         createdBy: {
           ref: userRef,
         },
-        images: [],
       });
-      router.push("/dashboard/news");
+      router.push("/dashboard/quick-access");
     } catch (err) {
       console.error(err);
     } finally {
@@ -98,15 +92,21 @@ const QuickAccessForm: FC<Props> = ({
     }
   };
 
-  const updateNews = async (data: Inputs) => {
+  const updateQuickAccess = async (data: Inputs) => {
     const result = confirm("更新して宜しいでしょうか");
     if (!result) return;
     setIsLoading(true);
-    const newRef = doc(db, "willfitNews", data.id);
+    const newRef = doc(db, "willfitQuickAccessLinks", data.id);
+    const userRef = doc(db, "authority", `${session.data?.user.uid}`);
     try {
       updateDoc(newRef, {
+        category: data.category,
         title: data.title,
+        link: data.link,
         updatedAt: serverTimestamp(),
+        updatedBy: {
+          ref: userRef,
+        },
       });
     } catch (err) {
       console.error(err);
@@ -114,23 +114,6 @@ const QuickAccessForm: FC<Props> = ({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const removeImage = (path: string, idx: number) => {
-    const result = confirm("削除して宜しいでしょうか");
-    if (!result) return;
-    const newImages = news?.images.filter((_, index) => index !== idx);
-    const docRef = doc(db, "willfitNews", `${news?.id}`);
-    const desertRef = ref(storage, path);
-    deleteObject(desertRef)
-      .then(() => {
-        updateDoc(docRef, {
-          images: newImages,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
   };
 
   return (
@@ -151,11 +134,17 @@ const QuickAccessForm: FC<Props> = ({
           )}
         </Flex>
         <Stack gap="md">
+          <Select
+            label="カテゴリー"
+            data={quickAccessCategoryList}
+            value={watch("category")}
+            onChange={(e) => handleSelectChange(e)}
+          />
           <TextInput label="タイトル" {...register("title")} />
           <TextInput label="リンク" {...register("link")} />
         </Stack>
         <Button type="submit" fullWidth>
-          {pageType === "NEW" ? "投稿する" : "更新する"}
+          {pageType === "NEW" ? "登録する" : "更新する"}
         </Button>
       </Stack>
     </Box>

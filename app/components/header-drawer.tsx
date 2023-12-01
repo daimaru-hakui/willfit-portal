@@ -1,7 +1,7 @@
 import { useDisclosure } from "@mantine/hooks";
 import { Drawer, Button, NavLink } from "@mantine/core";
-import { navList } from "@/utils/nav-list";
 import Link from "next/link";
+import { navList } from "@/utils/nav-list";
 
 const HeaderDrawer = () => {
   const [opened, { open, close }] = useDisclosure(false);

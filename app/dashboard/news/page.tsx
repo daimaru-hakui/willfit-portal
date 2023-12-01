@@ -4,7 +4,7 @@ import NewsArea from "./components/news-area";
 
 const NewsPage = () => {
   return (
-    <Container w="100%" maw={900}>
+    <Container w="100%" maw={1100}>
       <NewsArea  />
     </Container>
   );

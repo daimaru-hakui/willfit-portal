@@ -1,10 +1,10 @@
 "use client";
 import React, { FC } from "react";
-import { navList } from "@/utils/nav-list";
 import Link from "next/link";
 import { Flex, Text, Box, Button } from "@mantine/core";
 import HeaderMenu from "./header-menu";
 import HeaderDrawer from "./header-drawer";
+import { navList } from "@/utils/nav-list";
 
 const NavBar: FC = () => {
   return (

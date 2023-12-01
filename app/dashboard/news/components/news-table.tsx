@@ -15,7 +15,7 @@ interface Props {
 const NewsTable: FC<Props> = ({ newsList }) => {
   return (
     <Box style={{ overflow: "auto" }}>
-      <Table mt="md" w="830px">
+      <Table mt="md" w="100%" miw="1000px">
         <Table.Thead>
           <Table.Tr>
             <Table.Th>日付</Table.Th>

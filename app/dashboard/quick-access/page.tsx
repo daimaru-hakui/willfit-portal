@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import QuickAccessArea from "./components/quick-access-area";
+import { Container } from "@mantine/core";
 
 const QuickAccess = () => {
   return (
-    <div>QuickAccess</div>
-  )
-}
+    <Container maw={670}>
+      <QuickAccessArea />
+    </Container>
+  );
+};
 
-export default QuickAccess
+export default QuickAccess;

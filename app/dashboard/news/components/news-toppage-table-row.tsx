@@ -8,6 +8,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db, storage } from "@/lib/firebase/client";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { deleteObject, ref } from "firebase/storage";
 import { excerpt } from "@/utils/functions";
 
@@ -15,9 +16,10 @@ interface Props {
   news: News & { user: User };
 }
 
-const NewsTableRow: FC<Props> = ({ news }) => {
+const NewsToppageTableRow: FC<Props> = ({ news }) => {
   const session = useSession();
   const currentUser = session.data?.user.uid;
+  const pathname = usePathname();
 
   const deleteNews = async (id: string) => {
     const result = confirm("削除して宜しいでしょうか");
@@ -41,33 +43,16 @@ const NewsTableRow: FC<Props> = ({ news }) => {
   };
 
   return (
-    <Table.Tr fz="sm">
-      <Table.Td w={120}>{news?.postDate}</Table.Td>
-      <Table.Td w={250}>
+    <Table.Tr fz="sm" w="100%">
+      <Table.Td>{news?.postDate}</Table.Td>
+      <Table.Td>
         <Link href={`/dashboard/news/${news.id}`}>
-          {excerpt(news?.title, 20)}
+          {excerpt(news?.title, 25)}
         </Link>
       </Table.Td>
-      <Table.Td w={400}>{excerpt(news?.content, 22)}</Table.Td>
-      <Table.Td w={150}>{news?.user?.name}</Table.Td>
-      <Table.Td>
-        <Flex justify="flex-start" align="center" gap="md">
-          <Link href={`/dashboard/news/${news.id}`}>
-            <Button size="xs">詳細</Button>
-          </Link>
-          {currentUser === news.user.uid && (
-            <>
-              <NewsEditModal news={news} />
-              <AiOutlineDelete
-                style={{ cursor: "pointer", fontSize: 20 }}
-                onClick={() => deleteNews(news.id)}
-              />
-            </>
-          )}
-        </Flex>
-      </Table.Td>
+      <Table.Td>{news?.user?.name}</Table.Td>
     </Table.Tr>
   );
 };
 
-export default NewsTableRow;
+export default NewsToppageTableRow;
