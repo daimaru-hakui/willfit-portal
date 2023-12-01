@@ -67,10 +67,12 @@ export type News = {
   createdAt: any;
   cratedBy: {
     ref: string;
-    user:any
+    user: any;
   };
-  images:{
-    imageUrl:string;
-    imagePath:string;
-  }[]
+  images: {
+    url: string;
+    path: string;
+    type: string;
+    name: string;
+  }[];
 };

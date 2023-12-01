@@ -32,7 +32,7 @@ const AlcoholCheckArea: FC = () => {
   return (
     <>
       {!isAlcoholCheck && (
-        <Paper shadow="sm" radius="sm" mt="md" mb="md" p="md">
+        <Paper shadow="sm" radius="sm" mb="md" p="md">
           <Flex
             w="100%"
             gap="md"

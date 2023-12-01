@@ -13,7 +13,6 @@ import {
 } from "@mantine/core";
 import {
   addDoc,
-  arrayRemove,
   arrayUnion,
   collection,
   doc,
@@ -102,6 +101,7 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
         createdBy: {
           ref: userRef,
         },
+        images: [],
       });
       addImage(doc.id);
       router.push("/dashboard/news");
@@ -143,8 +143,10 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
       const docRef = doc(db, "willfitNews", id);
       updateDoc(docRef, {
         images: arrayUnion({
-          imageUrl: url,
-          imagePath: storageRef.fullPath,
+          url: url,
+          path: storageRef.fullPath,
+          type: file.type,
+          name: file.name,
         }),
       });
     }
@@ -187,17 +189,21 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
         <Stack gap="md">
           <TextInput label="日付" type="date" {...register("postDate")} />
           <TextInput label="タイトル" {...register("title")} />
-          <Textarea label="内容" {...register("content")} autosize></Textarea>
+          <Textarea label="内容" {...register("content")} autosize minRows={5}></Textarea>
 
           {news?.images?.map((image, idx) => (
-            <Box key={image.imageUrl} pos="relative">
-              <Image
-                src={image.imageUrl}
-                width={200}
-                height={200}
-                alt=""
-                style={{ width: "100%", height: "auto" }}
-              />
+            <Box key={image.url} pos="relative">
+              {image.type === "application/pdf" ? (
+                <Box>{image.name}</Box>
+              ) : (
+                <Image
+                  src={image.url}
+                  width={200}
+                  height={200}
+                  alt=""
+                  style={{ width: "100%", height: "auto" }}
+                />
+              )}
               <IoCloseCircle
                 style={{
                   position: "absolute",
@@ -208,14 +214,14 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
                   backgroundColor: "white",
                   borderRadius: "50%",
                 }}
-                onClick={() => removeImage(image.imagePath, idx)}
+                onClick={() => removeImage(image.path, idx)}
               />
             </Box>
           ))}
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,application/pdf"
             multiple
             onChange={handleFile}
             style={{ display: "none" }}
@@ -228,25 +234,31 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
               fileUpload.length >= 1 &&
               fileUpload.map((file, idx) => (
                 <Box key={file.name} pos="relative" mt="sm" mb="md">
-                  <Image
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    width={300}
-                    height={300}
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                  <IoCloseCircle
-                    style={{
-                      position: "absolute",
-                      top: "-10px",
-                      right: "-10px",
-                      cursor: "pointer",
-                      fontSize: 30,
-                      backgroundColor: "white",
-                      borderRadius: "50%",
-                    }}
-                    onClick={() => previewDelete(idx)}
-                  />
+                  {file.type === "application/pdf" ? (
+                    <Box>{file.name}</Box>
+                  ) : (
+                    <>
+                      <Image
+                        src={URL.createObjectURL(file)}
+                        alt={file.name}
+                        width={300}
+                        height={300}
+                        style={{ width: "100%", height: "auto" }}
+                      />
+                      <IoCloseCircle
+                        style={{
+                          position: "absolute",
+                          top: "-10px",
+                          right: "-10px",
+                          cursor: "pointer",
+                          fontSize: 30,
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                        }}
+                        onClick={() => previewDelete(idx)}
+                      />
+                    </>
+                  )}
                 </Box>
               ))}
           </Box>

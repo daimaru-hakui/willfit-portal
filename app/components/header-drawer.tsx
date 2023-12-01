@@ -9,12 +9,14 @@ const HeaderDrawer = () => {
   return (
     <>
       <Drawer opened={opened} onClose={close} title="menu" position="top">
-        {navList.map(({ title, path }, index) => (
+        {navList.map(({ title, path,target }, index) => (
           <NavLink
             key={index}
             label={title}
             component={Link}
             href={path}
+            target={target ? "_blank"  : "_self"}
+            rel="noopener noreferrer"
             onClick={() => close()}
           />
         ))}

@@ -34,9 +34,9 @@ const NewsTableRow: FC<Props> = ({ news }) => {
     const docRef = doc(db, "willfitNews", `${id}`);
     try {
       await deleteDoc(docRef);
-      if(news.images.length === 0) return
-      for (let { imagePath } of news?.images) {
-        await deleteImage(imagePath);
+      if (news.images.length === 0) return;
+      for (let { path } of news?.images) {
+        await deleteImage(path);
       }
     } catch (err) {
       console.error(err);
@@ -60,7 +60,7 @@ const NewsTableRow: FC<Props> = ({ news }) => {
       <Table.Td>{excerpt(news?.content, 20)}</Table.Td>
       <Table.Td>{news?.user?.name}</Table.Td>
       <Table.Td>
-        <Flex justify="center" align="center" gap="md">
+        <Flex justify="flex-start" align="center" gap="md">
           <Link href={`/dashboard/news/${news.id}`}>
             <Button size="xs">詳細</Button>
           </Link>

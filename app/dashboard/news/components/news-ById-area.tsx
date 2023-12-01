@@ -12,7 +12,7 @@ interface NewsUser extends News {
   user: User;
 }
 
-const NewsFindByIdArea: FC = () => {
+const NewsByIdArea: FC = () => {
   const { id } = useParams();
   const [news, setNews] = useState<NewsUser>();
 
@@ -59,15 +59,23 @@ const NewsFindByIdArea: FC = () => {
           </Box>
         </Box>
         {news?.images?.map((image) => (
-          <Box key={image.imageUrl}>
-            <Image
-              src={image.imageUrl}
-              width={200}
-              height={200}
-              alt=""
-              style={{ width: "100%", height: "auto" }}
-            />
-          </Box>
+          <>
+            {image.type === "application/pdf" ? (
+              <Link href={image.url} target="_blank" rel="noopener noreferrer">
+                <Box>{image.name}</Box>
+              </Link>
+            ) : (
+              <Box key={image.url}>
+                <Image
+                  src={image.url}
+                  width={200}
+                  height={200}
+                  alt={image.name}
+                  style={{ width: "100%", height: "auto" }}
+                />
+              </Box>
+            )}
+          </>
         ))}
         <Flex align="center" justify="flex-end" gap="sm">
           <Box fz="sm">作成者</Box>
@@ -78,4 +86,4 @@ const NewsFindByIdArea: FC = () => {
   );
 };
 
-export default NewsFindByIdArea;
+export default NewsByIdArea;

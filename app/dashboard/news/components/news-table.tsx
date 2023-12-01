@@ -1,48 +1,18 @@
 "use client";
 import { Box, Table } from "@mantine/core";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import NewsTableRow from "./news-table-row";
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  limit,
-  getDoc,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase/client";
 import { News, User } from "@/type";
-import { useStore } from "@/store";
 
 interface NewsUser extends News {
   user: User;
 }
 
-const NewsTable: FC = () => {
-  const newsList = useStore((state) => state.newsList);
-  const setNewsList = useStore((state) => state.setNewsList);
+interface Props {
+  newsList: NewsUser[];
+}
 
-  useEffect(() => {
-    const getNews = async () => {
-      const coll = collection(db, "willfitNews");
-      const q = query(coll, orderBy("createdAt", "desc"), limit(100));
-      onSnapshot(q, async (snapshot) => {
-        let array: NewsUser[] = [];
-        for (let doc of snapshot.docs) {
-          const userDoc = await getDoc(doc.data()?.createdBy.ref);
-          const data = {
-            ...doc.data(),
-            id: doc.id,
-            user: userDoc.data(),
-          } as NewsUser;
-          array.push(data);
-        }
-        setNewsList(array);
-      });
-    };
-    getNews();
-  }, [setNewsList]);
-
+const NewsTable: FC<Props> = ({ newsList }) => {
   return (
     <Box style={{ overflow: "auto" }}>
       <Table mt="md" w="830px">

@@ -28,8 +28,8 @@ const NavBar: FC = () => {
               <Box key={index}>
                 <Link
                   href={`${path}`}
-                  rel="noopener noreferrer"
                   target={target ? "_blank" : "_self"}
+                  rel="noopener noreferrer"
                 >
                   <Button
                     variant="outline"
