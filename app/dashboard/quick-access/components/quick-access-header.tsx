@@ -5,7 +5,7 @@ import Link from "next/link";
 const QuickAccessHeader = () => {
   return (
     <Flex justify="space-between">
-      <Title order={2}>クイックアクセス</Title>
+      <Title order={2}>クイックアクセスリンク</Title>
       <Flex gap="xs">
         <Link href="/dashboard">
           <Button size="xs" variant="outline">

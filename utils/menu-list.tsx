@@ -19,7 +19,7 @@ export const menuList = [
     icon: <PiBeerSteinBold style={{ width: rem(14), height: rem(14) }} />,
   },
   {
-    title: "クイックリンク",
+    title: "クイックアクセス",
     link: "/dashboard/quick-access",
     icon: <PiBeerSteinBold style={{ width: rem(14), height: rem(14) }} />,
   },

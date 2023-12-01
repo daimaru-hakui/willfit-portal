@@ -43,7 +43,7 @@ const NewsTableRow: FC<Props> = ({ news }) => {
   return (
     <Table.Tr fz="sm">
       <Table.Td w={120}>{news?.postDate}</Table.Td>
-      <Table.Td w={250}>
+      <Table.Td w={320}>
         <Link href={`/dashboard/news/${news.id}`}>
           {excerpt(news?.title, 20)}
         </Link>

@@ -5,7 +5,7 @@ import NewsFindByIdArea from "../components/news-ById-area";
 const NewsFindOnePage = () => {
   
   return (
-    <Container maw={500}>
+    <Container maw={600}>
       <NewsFindByIdArea  />
     </Container>
   );

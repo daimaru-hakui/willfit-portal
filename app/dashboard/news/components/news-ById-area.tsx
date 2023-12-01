@@ -32,29 +32,22 @@ const NewsByIdArea: FC = () => {
 
   return (
     <Paper shadow="sm" p="md">
+      <Link href="/dashboard/news">
+        <Button size="xs" variant="outline">
+          一覧へ
+        </Button>
+      </Link>
       <Flex align="center" justify="space-between">
-        <Title order={2}>詳細</Title>
-        <Link href="/dashboard/news">
-          <Button size="xs" variant="outline">
-            一覧へ
-          </Button>
-        </Link>
+        <Title mt="xs" order={2}>
+          {news?.title}
+        </Title>
       </Flex>
-      <Box fz="sm" ta="right">
+      <Box mt={5} fz="xs" ta="left">
         登録日: {news?.postDate}
       </Box>
       <Stack gap="md" mt="md">
         <Box>
-          <Box fz="sm" fw="bold">
-            タイトル
-          </Box>
-          <Box mt={2}>{news?.title}</Box>
-        </Box>
-        <Box>
-          <Box fz="sm" fw="bold">
-            内容
-          </Box>
-          <Box mt={2} style={{ whiteSpace: "pre-wrap" }}>
+          <Box mt="sm" style={{ whiteSpace: "pre-wrap" }}>
             {news?.content}
           </Box>
         </Box>
