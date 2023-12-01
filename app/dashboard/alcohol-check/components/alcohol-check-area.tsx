@@ -11,7 +11,7 @@ const AlcoholCheckArea: FC = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const session = useSession();
   const currentUser = session.data?.user.uid || null;
-  const [isAlcoholCheck, setIsAlcoholCheck] = useState(true);
+  const [isAlcoholCheck, setIsAlcoholCheck] = useState(false);
 
   const defaultValues = {
     alcoholCheck1: "2",
@@ -24,14 +24,14 @@ const AlcoholCheckArea: FC = () => {
     const docRef = doc(db, "alcoholCheckList", todayDate);
     onSnapshot(docRef, (querySnapshot) => {
       setIsAlcoholCheck(
-        { ...querySnapshot.data() }.member.includes(currentUser)
+        !{ ...querySnapshot.data() }.member?.includes(currentUser)
       );
     });
   }, [currentUser, todayDate]);
 
   return (
     <>
-      {!isAlcoholCheck && (
+      {isAlcoholCheck && (
         <Paper shadow="sm" radius="sm" mb="md" p="md">
           <Flex
             w="100%"
