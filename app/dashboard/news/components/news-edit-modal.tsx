@@ -1,4 +1,4 @@
-import { Button, Modal } from "@mantine/core";
+import {  Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { FC } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
