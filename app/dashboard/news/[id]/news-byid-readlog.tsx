@@ -59,14 +59,15 @@ const NewsByIdReadLog = () => {
             {readLogs.map((readLog) => (
               <Flex key={readLog.id} align="center" justify="space-between">
                 <Box py={2}>{readLog.user.name}</Box>
-                <Flex  gap={5}>
+                <Flex gap={5}>
                   <Flex align="center">
                     <MdAccessTime />
                   </Flex>
-                  {format(
-                    new Date(readLog.createdAt.toDate()),
-                    "yyyy-MM-dd HH:mm"
-                  )}
+                  {readLog?.createdAt &&
+                    format(
+                      new Date(readLog?.createdAt?.toDate()),
+                      "yyyy-MM-dd HH:mm"
+                    )}
                 </Flex>
               </Flex>
             ))}
