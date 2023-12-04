@@ -86,3 +86,11 @@ export type QuickAccessLink = {
   };
   createdAt: any;
 };
+
+export type ReadLog = {
+  id: string;
+  createdAt: any;
+  createdBy: {
+    ref: string;
+  };
+};
