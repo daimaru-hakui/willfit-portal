@@ -1,11 +1,11 @@
 "use client";
 import { News, User } from "@/type";
-import { Button, Flex, Table } from "@mantine/core";
+import { Button, Flex, Table, Box } from "@mantine/core";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import NewsEditModal from "./news-edit-modal";
 import { AiOutlineDelete } from "react-icons/ai";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db, storage } from "@/lib/firebase/client";
 import { useSession } from "next-auth/react";
 import { deleteObject, ref } from "firebase/storage";
@@ -18,6 +18,20 @@ interface Props {
 const NewsTableRow: FC<Props> = ({ news }) => {
   const session = useSession();
   const currentUser = session.data?.user.uid;
+
+  const uid = session.data?.user.uid;
+  const [unRead, setUnRead] = useState(false);
+
+  useEffect(() => {
+    if (!uid) return;
+    const getUnRead = async () => {
+      const docRef = doc(db, "willfitNews", news.id, "readLogs", `${uid}`);
+      const snapShot = await getDoc(docRef);
+      if (snapShot.exists()) return;
+      setUnRead(true);
+    };
+    getUnRead();
+  }, [news.id, uid]);
 
   const deleteNews = async (id: string) => {
     const result = confirm("削除して宜しいでしょうか");
@@ -44,9 +58,14 @@ const NewsTableRow: FC<Props> = ({ news }) => {
     <Table.Tr fz="sm">
       <Table.Td w={120}>{news?.postDate}</Table.Td>
       <Table.Td w={320}>
-        <Link href={`/dashboard/news/${news.id}`}>
-          {excerpt(news?.title, 20)}
-        </Link>
+        <Flex align="center" gap="xs">
+          <Link href={`/dashboard/news/${news.id}`}>
+            {excerpt(news?.title, 20)}
+          </Link>
+          {unRead && (
+            <Box w={5} h={5} bg="red" style={{ borderRadius: "50%" }}></Box>
+          )}
+        </Flex>
       </Table.Td>
       <Table.Td w={400}>{excerpt(news?.content, 22)}</Table.Td>
       <Table.Td w={150}>{news?.user?.name}</Table.Td>

@@ -1,16 +1,13 @@
 "use client";
 import { News, User } from "@/type";
-import { Button, Flex, Table } from "@mantine/core";
+import { Table, Box, Flex } from "@mantine/core";
 import Link from "next/link";
-import React, { FC } from "react";
-import NewsEditModal from "./news-edit-modal";
-import { AiOutlineDelete } from "react-icons/ai";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db, storage } from "@/lib/firebase/client";
+import React, { FC, useEffect, useState } from "react";
+
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
-import { deleteObject, ref } from "firebase/storage";
 import { excerpt } from "@/utils/functions";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase/client";
 
 interface Props {
   news: News & { user: User };
@@ -18,37 +15,32 @@ interface Props {
 
 const NewsToppageTableRow: FC<Props> = ({ news }) => {
   const session = useSession();
-  const currentUser = session.data?.user.uid;
-  const pathname = usePathname();
+  const uid = session.data?.user.uid;
+  const [unRead, setUnRead] = useState(false);
 
-  const deleteNews = async (id: string) => {
-    const result = confirm("削除して宜しいでしょうか");
-    if (!result) return;
-    const docRef = doc(db, "willfitNews", `${id}`);
-    try {
-      await deleteDoc(docRef);
-      if (news.images.length === 0) return;
-      for (let { path } of news?.images) {
-        await deleteImage(path);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("削除に失敗しました");
-    }
-  };
-
-  const deleteImage = async (path: string) => {
-    const desertRef = ref(storage, path);
-    await deleteObject(desertRef);
-  };
+  useEffect(() => {
+    if (!uid) return;
+    const getUnRead = async () => {
+      const docRef = doc(db, "willfitNews", news.id, "readLogs", `${uid}`);
+      const snapShot = await getDoc(docRef);
+      if (snapShot.exists()) return;
+      setUnRead(true);
+    };
+    getUnRead();
+  }, [news.id, uid]);
 
   return (
     <Table.Tr fz="sm" w="100%">
       <Table.Td>{news?.postDate}</Table.Td>
       <Table.Td>
-        <Link href={`/dashboard/news/${news.id}`}>
-          {excerpt(news?.title, 25)}
-        </Link>
+        <Flex align="center" gap="xs">
+          <Link href={`/dashboard/news/${news.id}`}>
+            {excerpt(news?.title, 25)}
+          </Link>
+          {unRead && (
+            <Box w={5} h={5} bg="red" style={{ borderRadius: "50%" }}></Box>
+          )}
+        </Flex>
       </Table.Td>
       <Table.Td>{news?.user?.name}</Table.Td>
     </Table.Tr>
