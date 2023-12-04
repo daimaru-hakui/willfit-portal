@@ -47,7 +47,7 @@ const NewsByIdReadLog = () => {
     };
     getReadLogs();
   }, [id, uid]);
-  
+
   return (
     <>
       {readLogs.length > 0 && (
@@ -58,7 +58,7 @@ const NewsByIdReadLog = () => {
               px="xs"
               py={2}
               bg="cyan"
-              style={{ borderRadius: "5px", color: "white" }}
+              style={{ borderRadius: "6px", color: "white" }}
             >
               {readLog.user.name}
             </Box>
