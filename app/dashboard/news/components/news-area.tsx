@@ -1,9 +1,7 @@
 "use client";
-import { Paper } from "@mantine/core";
 import React, { FC, useEffect } from "react";
+
 import NewsTable from "./news-table";
-import NewsHeader from "./news-header";
-import { useStore } from "@/store";
 import {
   collection,
   getDoc,
@@ -13,7 +11,10 @@ import {
   query,
 } from "firebase/firestore";
 import { News, User } from "@/type";
+import { useStore } from "@/store";
 import { db } from "@/lib/firebase/client";
+import { Paper } from "@mantine/core";
+import NewsHeader from "./news-header";
 
 interface NewsUser extends News {
   user: User;
@@ -49,7 +50,7 @@ const NewsArea: FC = () => {
       <NewsHeader />
       <NewsTable newsList={newsList} />
     </Paper>
-  );
-};
+  )
+}
 
 export default NewsArea;
