@@ -11,7 +11,9 @@ import {
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Box, Flex } from "@mantine/core";
+import { Box, Flex, Paper, Title } from "@mantine/core";
+import { format } from "date-fns";
+import { MdAccessTime } from "react-icons/md";
 
 interface ReadLogUser extends ReadLog {
   user: User;
@@ -51,19 +53,25 @@ const NewsByIdReadLog = () => {
   return (
     <>
       {readLogs.length > 0 && (
-        <Flex mt="sm" direction="row" gap="sm">
-          {readLogs.map((readLog) => (
-            <Box
-              key={readLog.id}
-              px="xs"
-              py={2}
-              bg="cyan"
-              style={{ borderRadius: "6px", color: "white" }}
-            >
-              {readLog.user.name}
-            </Box>
-          ))}
-        </Flex>
+        <Paper p="sm" mt={{ base: "sm", md: "md" }} shadow="sm">
+          <Title order={4}>既読者</Title>
+          <Box mt="sm">
+            {readLogs.map((readLog) => (
+              <Flex key={readLog.id} align="center" justify="space-between">
+                <Box py={2}>{readLog.user.name}</Box>
+                <Flex  gap={5}>
+                  <Flex align="center">
+                    <MdAccessTime />
+                  </Flex>
+                  {format(
+                    new Date(readLog.createdAt.toDate()),
+                    "yyyy-MM-dd HH:mm"
+                  )}
+                </Flex>
+              </Flex>
+            ))}
+          </Box>
+        </Paper>
       )}
     </>
   );
