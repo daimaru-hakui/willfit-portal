@@ -51,7 +51,7 @@ const NewsByIdReadLog = () => {
   return (
     <>
       {readLogs.length > 0 && (
-        <Flex mt="sm" direction="row">
+        <Flex mt="sm" direction="row" gap="sm">
           {readLogs.map((readLog) => (
             <Box
               key={readLog.id}
