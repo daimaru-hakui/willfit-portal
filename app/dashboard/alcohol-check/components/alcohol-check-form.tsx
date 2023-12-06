@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   addDoc,
@@ -14,14 +14,14 @@ import {
 import { db } from "@/lib/firebase/client";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import { Box, Button, Radio, Flex, Stack } from "@mantine/core";
+import { Box, Button, Radio, Flex, Stack, NumberInput } from "@mantine/core";
 import { AlcoholCheckInputs } from "@/type";
 
 interface Props {
   close: () => void;
   defaultValues: AlcoholCheckInputs;
   pageType: "NEW" | "EDIT";
-  postId?: string ;
+  postId?: string;
 }
 
 const AlcoholCheckForm: FC<Props> = ({
@@ -30,6 +30,7 @@ const AlcoholCheckForm: FC<Props> = ({
   pageType,
   postId,
 }) => {
+  const [alchoolCheckValue, setAlcholCheckValue] = useState<string | number>(defaultValues.alcoholCheckValue);
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const session = useSession();
   const currentUser = session.data?.user.uid;
@@ -79,7 +80,7 @@ const AlcoholCheckForm: FC<Props> = ({
       createdAt: serverTimestamp(),
       alcoholCheck1: data.alcoholCheck1,
       alcoholCheck2: data.alcoholCheck2,
-      alcoholCheckValue: Number(data.alcoholCheckValue) || 0,
+      alcoholCheckValue: alchoolCheckValue || 0,
     });
   };
 
@@ -89,7 +90,7 @@ const AlcoholCheckForm: FC<Props> = ({
     updateDoc(docRef, {
       alcoholCheck1: data.alcoholCheck1,
       alcoholCheck2: data.alcoholCheck2,
-      alcoholCheckValue: Number(data.alcoholCheckValue) || 0,
+      alcoholCheckValue: alchoolCheckValue || 0,
       updatedAt: serverTimestamp(),
     });
   };
@@ -137,22 +138,14 @@ const AlcoholCheckForm: FC<Props> = ({
         </Stack>
         <Stack gap={6}>
           <Box>測定結果（mg）</Box>
-
-          <input
-            type="number"
-            defaultValue={0}
-            {...register("alcoholCheckValue", {
-              required: true,
-              max: 10,
-              min: 0,
-            })}
+          <NumberInput
             onFocus={focusHandler}
+            value={alchoolCheckValue}
+            min={0}
+            onChange={(e) => setAlcholCheckValue(e)}
           />
         </Stack>
-        <Button
-          type="submit"
-          fullWidth
-        >
+        <Button type="submit" fullWidth>
           {pageType === "NEW" ? "提出する" : "更新する"}
         </Button>
       </Stack>

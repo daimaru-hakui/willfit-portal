@@ -36,7 +36,7 @@ const AlcoholCheckFindOneTableRow: FC<Props> = ({ alcoholCheck, users }) => {
       <Table.Td>
         {alcoholCheck.alcoholCheck2 === "1" ? "なし" : "あり"}
       </Table.Td>
-      <Table.Td>{alcoholCheck.alcoholCheckValue}</Table.Td>
+      <Table.Td>{alcoholCheck.alcoholCheckValue}mg</Table.Td>
       <Table.Td>
         {alcoholCheck.createdAt &&
           format(new Date(alcoholCheck.createdAt.toDate()), "HH時mm分ss秒")}
