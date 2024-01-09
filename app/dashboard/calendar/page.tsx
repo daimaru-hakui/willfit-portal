@@ -2,7 +2,7 @@ import { Container, Paper } from "@mantine/core";
 import axios from "axios";
 import React from "react";
 import { Calendar } from "@/type";
-import CalendarArea from "./components/calendarArea";
+import CalendarArea from "./components/calendar-area";
 
 const CalendarPage = async () => {
   const getCalendar = async () => {

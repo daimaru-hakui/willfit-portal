@@ -44,6 +44,7 @@ const LoginForm: FC = () => {
         callbackUrl: "/dashboard",
       });
     } catch (error) {
+      alert("ログインに失敗しました")
       console.log("error");
       console.error(error);
     }

@@ -31,7 +31,7 @@ const CalendarArea: FC<Props> = ({ data }) => {
         )}
       </Tabs.Panel>
       <Tabs.Panel value="honnsha">
-        {data.imageHonsha.url && (
+        {data?.imageHonsha.url && (
           <Image
             src={data?.imageHonsha.url}
             width={800}
@@ -43,7 +43,7 @@ const CalendarArea: FC<Props> = ({ data }) => {
             }}
           />
         )}
-        {data.imageHonshaNext.url && (
+        {/* {data?.imageHonshaNext.url && (
           <Image
             src={data?.imageHonshaNext.url}
             width={800}
@@ -54,11 +54,11 @@ const CalendarArea: FC<Props> = ({ data }) => {
               height: "auto",
             }}
           />
-        )}
+        )} */}
       </Tabs.Panel>
       <Tabs.Panel value="tokushima">
         <Box w="100%">
-          {data.imageTokushima.url && (
+          {data?.imageTokushima.url && (
             <Image
               src={data?.imageTokushima.url}
               width={800}
@@ -70,7 +70,7 @@ const CalendarArea: FC<Props> = ({ data }) => {
               }}
             />
           )}
-          {data.imageTokushimaNext.url && (
+          {/* {data?.imageTokushimaNext.url && (
             <Image
               src={data?.imageTokushimaNext.url}
               width={800}
@@ -81,7 +81,7 @@ const CalendarArea: FC<Props> = ({ data }) => {
                 height: "auto",
               }}
             />
-          )}
+          )} */}
         </Box>
       </Tabs.Panel>
     </Tabs>
