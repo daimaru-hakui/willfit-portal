@@ -82,6 +82,14 @@ const AlcoholCheckForm: FC<Props> = ({
       alcoholCheck2: data.alcoholCheck2,
       alcoholCheckValue: alchoolCheckValue || 0,
     });
+    await setDoc(doc(db, "alcoholCheckList", todayDate, "alcoholCheckData", `${currentUser}`), {
+      date: todayDate,
+      uid: currentUser,
+      createdAt: serverTimestamp(),
+      alcoholCheck1: data.alcoholCheck1,
+      alcoholCheck2: data.alcoholCheck2,
+      alcoholCheckValue: alchoolCheckValue || 0,
+    });
   };
 
   const updateAlcoholCheckData = async (data: AlcoholCheckInputs) => {
