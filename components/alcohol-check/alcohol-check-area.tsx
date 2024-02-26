@@ -14,8 +14,8 @@ const AlcoholCheckArea: FC = () => {
   const [isAlcoholCheck, setIsAlcoholCheck] = useState(false);
 
   const defaultValues = {
-    alcoholCheck1: "2",
-    alcoholCheck2: "2",
+    alcoholCheck1: "1",
+    alcoholCheck2: "1",
     alcoholCheckValue: 0,
   };
 
