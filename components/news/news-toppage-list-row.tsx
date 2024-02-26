@@ -13,7 +13,7 @@ interface Props {
   news: News & { user: User };
 }
 
-const NewsToppageTableRow: FC<Props> = ({ news }) => {
+const NewsToppageListRow: FC<Props> = ({ news }) => {
   const session = useSession();
   const uid = session.data?.user.uid;
   const [unRead, setUnRead] = useState(false);
@@ -47,4 +47,4 @@ const NewsToppageTableRow: FC<Props> = ({ news }) => {
   );
 };
 
-export default NewsToppageTableRow;
+export default NewsToppageListRow;

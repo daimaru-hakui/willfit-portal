@@ -11,7 +11,7 @@ interface Props {
   userId: string;
 }
 
-const AlcoholCheckShowModal: FC<Props> = ({ defaultValues, userId }) => {
+const AlcoholCheckEditModal: FC<Props> = ({ defaultValues, userId }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { dateId }: { dateId: string } = useParams();
 
@@ -34,4 +34,4 @@ const AlcoholCheckShowModal: FC<Props> = ({ defaultValues, userId }) => {
   );
 };
 
-export default AlcoholCheckShowModal;
+export default AlcoholCheckEditModal;

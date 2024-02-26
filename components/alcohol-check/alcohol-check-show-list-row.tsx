@@ -2,14 +2,14 @@
 import { AlcoholCheck, User } from "@/type";
 import { Table } from "@mantine/core";
 import { format } from "date-fns";
-import React, { FC} from "react";
-import AlcoholCheckShowModal from "./alcohol-check-show-modal";
+import React, { FC } from "react";
+import AlcoholCheckEditModal from "./alcohol-check-edit-modal";
 
 interface Props {
   alcoholCheck: AlcoholCheck & { user: User };
 }
 
-const AlcoholCheckListRow: FC<Props> = ({ alcoholCheck }) => {
+const AlcoholCheckShowListRow: FC<Props> = ({ alcoholCheck }) => {
   return (
     <Table.Tr>
       <Table.Td>{alcoholCheck?.user?.name}</Table.Td>
@@ -29,7 +29,7 @@ const AlcoholCheckListRow: FC<Props> = ({ alcoholCheck }) => {
           format(new Date(alcoholCheck?.updatedAt.toDate()), "HH時mm分ss秒")}
       </Table.Td>
       <Table.Td>
-        <AlcoholCheckShowModal
+        <AlcoholCheckEditModal
           defaultValues={alcoholCheck}
           userId={alcoholCheck.id}
         />
@@ -38,4 +38,4 @@ const AlcoholCheckListRow: FC<Props> = ({ alcoholCheck }) => {
   );
 };
 
-export default AlcoholCheckListRow;
+export default AlcoholCheckShowListRow;

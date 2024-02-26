@@ -15,7 +15,7 @@ interface Props {
   news: News & { user: User };
 }
 
-const NewsTableRow: FC<Props> = ({ news }) => {
+const NewsListRow: FC<Props> = ({ news }) => {
   const session = useSession();
   const currentUser = session.data?.user.uid;
 
@@ -89,4 +89,4 @@ const NewsTableRow: FC<Props> = ({ news }) => {
   );
 };
 
-export default NewsTableRow;
+export default NewsListRow;

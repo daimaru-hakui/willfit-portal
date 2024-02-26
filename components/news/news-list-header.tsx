@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const NewsHeader = () => {
+const NewsListHeader = () => {
   const pathname = usePathname();
   return (
     <Flex justify="space-between" align="center">
@@ -33,4 +33,4 @@ const NewsHeader = () => {
   );
 };
 
-export default NewsHeader;
+export default NewsListHeader;

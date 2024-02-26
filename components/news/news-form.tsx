@@ -90,7 +90,7 @@ const NewsForm: FC<Props> = ({ pageType, defaultValues, close, news }) => {
 
   const addNews = async (data: Inputs) => {
     const newsRef = collection(db, "willfitNews");
-    const userRef = doc(db, "authority", `${session.data?.user.uid}`);
+    const userRef = doc(db, "users", `${session.data?.user.uid}`);
     setIsLoading(true);
     try {
       const doc = await addDoc(newsRef, {

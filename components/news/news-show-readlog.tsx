@@ -19,7 +19,7 @@ interface ReadLogUser extends ReadLog {
   user: User;
 }
 
-const NewsByIdReadLog = () => {
+const NewsShowReadLog = () => {
   const { id } = useParams();
   const session = useSession();
   const uid = session.data?.user.uid;
@@ -78,4 +78,4 @@ const NewsByIdReadLog = () => {
   );
 };
 
-export default NewsByIdReadLog;
+export default NewsShowReadLog;

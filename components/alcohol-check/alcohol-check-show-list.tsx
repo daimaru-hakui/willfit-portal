@@ -5,19 +5,24 @@ import { useParams } from "next/navigation";
 import {
   collection,
   getDoc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { AlcoholCheck, User } from "@/type";
-import AlcoholCheckListRow from "./alcohol-check-show-list-row";
+import AlcoholCheckShowListRow from "./alcohol-check-show-list-row";
+import AlcoholCheckShowOldListRow from "./alcohol-check-show-old-list-row";
 
 const AlcoholCheckShowList: FC = () => {
   const { dateId }: { dateId: string } = useParams();
+  const [users, setUsers] = useState<User[]>([]);
   const [alcoholChecks, setAlcoholChecks] = useState<
     (AlcoholCheck & { user: User })[]
   >([]);
+  const [oldAlcoholChecks, setOldAlcoholChecks] = useState<AlcoholCheck[]>([]);
 
   useEffect(() => {
     if (!dateId) return;
@@ -39,6 +44,32 @@ const AlcoholCheckShowList: FC = () => {
     });
   }, [dateId]);
 
+  useEffect(() => {
+    if (!dateId) return;
+    const coll = collection(db, "alcoholCheckData");
+    const q = query(
+      coll,
+      where("date", "==", dateId),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (snapshot) =>
+      setOldAlcoholChecks(
+        snapshot.docs.map(
+          (doc) => ({ ...doc.data(), id: doc.id } as AlcoholCheck)
+        )
+      )
+    );
+  }, [dateId]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const usersRef = collection(db, "authority");
+      const docSnap = await getDocs(usersRef);
+      setUsers(docSnap.docs.map((doc) => ({ ...doc.data() } as User)));
+    };
+    getUsers();
+  }, []);
+
   return (
     <Table w="100%">
       <Table.Thead>
@@ -53,12 +84,21 @@ const AlcoholCheckShowList: FC = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {alcoholChecks.map((alcoholCheck) => (
-          <AlcoholCheckListRow
-            key={alcoholCheck.id}
-            alcoholCheck={alcoholCheck}
-          />
-        ))}
+        {oldAlcoholChecks.length === 0
+          ? alcoholChecks.map((alcoholCheck) => (
+              <AlcoholCheckShowListRow
+                key={alcoholCheck.id}
+                alcoholCheck={alcoholCheck}
+              />
+            ))
+          : oldAlcoholChecks.map((alcoholCheck) => (
+              <AlcoholCheckShowOldListRow
+                key={alcoholCheck.id}
+                dateId={dateId}
+                alcoholCheck={alcoholCheck}
+                users={users}
+              />
+            ))}
       </Table.Tbody>
     </Table>
   );

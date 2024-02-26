@@ -2,7 +2,9 @@
 import React, { FC, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
+  addDoc,
   arrayUnion,
+  collection,
   doc,
   getDoc,
   serverTimestamp,
@@ -79,6 +81,14 @@ const AlcoholCheckForm: FC<Props> = ({
   };
 
   const addAlcoholCheckData = async (data: AlcoholCheckInputs) => {
+    await addDoc(collection(db, "alcoholCheckData"), {
+      date: todayDate,
+      uid: currentUser,
+      createdAt: serverTimestamp(),
+      alcoholCheck1: data.alcoholCheck1,
+      alcoholCheck2: data.alcoholCheck2,
+      alcoholCheckValue: alchoolCheckValue || 0,
+    });
     // 2024年度以降
     const userRef = doc(db, "users", currentUser as string);
     await setDoc(

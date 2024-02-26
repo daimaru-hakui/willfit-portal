@@ -1,15 +1,14 @@
 import { News, User } from "@/type";
 import { create } from "zustand";
 
-interface NewsUser extends News {
-  user: User;
-}
 
 type useState = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  newsList: NewsUser[] ;
-  setNewsList: (newsList: NewsUser[]) => void;
+  newsList: (News & { user: User })[];
+  setNewsList: (newsList: (News & { user: User })[] ) => void;
+  newsLimit: (News & { user: User })[];
+  setNewsLimit: (newsLimit: (News & { user: User })[]) => void;
 };
 
 export const useStore = create<useState>((set) => ({
@@ -17,4 +16,6 @@ export const useStore = create<useState>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
   newsList: [],
   setNewsList: (newsList) => set({ newsList }),
+  newsLimit: [],
+  setNewsLimit: (newsLimit) => set({ newsLimit }),
 }));

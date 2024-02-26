@@ -6,7 +6,7 @@ interface Props {
     alcoholCheck:any
 }
 
-const AlcoholCheckTableRow:FC<Props> = ({alcoholCheck}) => {
+const AlcoholCheckListRow:FC<Props> = ({alcoholCheck}) => {
   return (
     <Table.Tr>
       <Table.Td>{alcoholCheck.id}</Table.Td>
@@ -20,4 +20,4 @@ const AlcoholCheckTableRow:FC<Props> = ({alcoholCheck}) => {
   );
 };
 
-export default AlcoholCheckTableRow;
+export default AlcoholCheckListRow;

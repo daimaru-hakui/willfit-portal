@@ -1,7 +1,7 @@
 "use client";
 import { Table } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import AlcoholCheckTableRow from "./alcohol-check-table-row";
+import AlcoholCheckListRow from "./alcohol-check-list-row";
 import {
   collection,
   getCountFromServer,
@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 
-const AlcoholCheckTable = () => {
+const AlcoholCheckList = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [alcoholChecks, setAlcoholChecks] = useState<any>([]);
 
@@ -47,7 +47,7 @@ const AlcoholCheckTable = () => {
       </Table.Thead>
       <Table.Tbody>
         {alcoholChecks.map((alcoholCheck: any) => (
-          <AlcoholCheckTableRow
+          <AlcoholCheckListRow
             key={alcoholCheck.id}
             alcoholCheck={alcoholCheck}
           />
@@ -57,4 +57,4 @@ const AlcoholCheckTable = () => {
   );
 };
 
-export default AlcoholCheckTable;
+export default AlcoholCheckList;

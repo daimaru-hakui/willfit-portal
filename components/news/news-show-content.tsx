@@ -9,15 +9,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface NewsUser extends News {
-  user: User;
-}
-
-const NewsByIdContent = () => {
+const NewsShowContent = () => {
   const { id } = useParams();
   const session = useSession();
   const uid = session.data?.user.uid;
-  const [news, setNews] = useState<NewsUser>();
+  const [news, setNews] = useState<News & { user: User }>();
 
   useEffect(() => {
     const getNews = async () => {
@@ -28,7 +24,7 @@ const NewsByIdContent = () => {
         ...snapShot.data(),
         id: snapShot.id,
         user: user.data(),
-      } as NewsUser);
+      } as News & { user: User });
     };
     getNews();
   }, [id]);
@@ -105,4 +101,4 @@ const NewsByIdContent = () => {
   );
 };
 
-export default NewsByIdContent;
+export default NewsShowContent;

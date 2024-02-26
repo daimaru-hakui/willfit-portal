@@ -3,7 +3,6 @@ import { AlcoholCheck, User } from "@/type";
 import { Table } from "@mantine/core";
 import { format } from "date-fns";
 import React, { FC, useEffect, useState } from "react";
-import AlcoholCheckFindOneModal from "./alcohol-check-find-one-modal";
 import { useSession } from "next-auth/react";
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
   users: User[];
 }
 
-const AlcoholCheckFindOneTableRow: FC<Props> = ({ dateId,alcoholCheck, users }) => {
+const AlcoholCheckShowOldListRow: FC<Props> = ({ dateId,alcoholCheck, users }) => {
   const [isAlcoholCheck, setIsAlcoholCheck] = useState(false);
   const session = useSession();
   const currentUser = session.data?.user.uid;
@@ -33,8 +32,8 @@ const AlcoholCheckFindOneTableRow: FC<Props> = ({ dateId,alcoholCheck, users }) 
   return (
     <Table.Tr>
       <Table.Td>{getUsername(alcoholCheck.uid)}</Table.Td>
-      <Table.Td>{alcoholCheck.alcoholCheck1 === "1" ? "済" : "未"}</Table.Td>
-      <Table.Td>
+      <Table.Td ta="center">{alcoholCheck.alcoholCheck1 === "1" ? "済" : "未"}</Table.Td>
+      <Table.Td ta="center">
         {alcoholCheck.alcoholCheck2 === "1" ? "なし" : "あり"}
       </Table.Td>
       <Table.Td>{alcoholCheck.alcoholCheckValue}mg</Table.Td>
@@ -46,17 +45,8 @@ const AlcoholCheckFindOneTableRow: FC<Props> = ({ dateId,alcoholCheck, users }) 
         {alcoholCheck.updatedAt &&
           format(new Date(alcoholCheck?.updatedAt.toDate()), "HH時mm分ss秒")}
       </Table.Td>
-      {isAlcoholCheck && (
-        <Table.Td>
-          <AlcoholCheckFindOneModal
-            defaultValues={alcoholCheck}
-            dateId={dateId}
-            postId={alcoholCheck.id}
-          />
-        </Table.Td>
-      )}
     </Table.Tr>
   );
 };
 
-export default AlcoholCheckFindOneTableRow;
+export default AlcoholCheckShowOldListRow;
