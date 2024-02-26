@@ -30,7 +30,9 @@ const AlcoholCheckForm: FC<Props> = ({
   pageType,
   postId,
 }) => {
-  const [alchoolCheckValue, setAlcholCheckValue] = useState<string | number>(defaultValues.alcoholCheckValue);
+  const [alchoolCheckValue, setAlcholCheckValue] = useState<string | number>(
+    defaultValues.alcoholCheckValue
+  );
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const session = useSession();
   const currentUser = session.data?.user.uid;
@@ -82,14 +84,25 @@ const AlcoholCheckForm: FC<Props> = ({
       alcoholCheck2: data.alcoholCheck2,
       alcoholCheckValue: alchoolCheckValue || 0,
     });
-    await setDoc(doc(db, "alcoholCheckList", todayDate, "alcoholCheckData", `${currentUser}`), {
-      date: todayDate,
-      uid: currentUser,
-      createdAt: serverTimestamp(),
-      alcoholCheck1: data.alcoholCheck1,
-      alcoholCheck2: data.alcoholCheck2,
-      alcoholCheckValue: alchoolCheckValue || 0,
-    });
+    const userRef = doc(db, "users", currentUser as string);
+    await setDoc(
+      doc(
+        db,
+        "alcoholCheckList",
+        todayDate,
+        "alcoholCheckData",
+        `${currentUser}`
+      ),
+      {
+        date: todayDate,
+        uid: currentUser,
+        createdAt: serverTimestamp(),
+        alcoholCheck1: data.alcoholCheck1,
+        alcoholCheck2: data.alcoholCheck2,
+        alcoholCheckValue: alchoolCheckValue || 0,
+        userRef,
+      }
+    );
   };
 
   const updateAlcoholCheckData = async (data: AlcoholCheckInputs) => {
