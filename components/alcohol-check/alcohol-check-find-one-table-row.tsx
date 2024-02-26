@@ -7,11 +7,12 @@ import AlcoholCheckFindOneModal from "./alcohol-check-find-one-modal";
 import { useSession } from "next-auth/react";
 
 interface Props {
+  dateId:string
   alcoholCheck: AlcoholCheck;
   users: User[];
 }
 
-const AlcoholCheckFindOneTableRow: FC<Props> = ({ alcoholCheck, users }) => {
+const AlcoholCheckFindOneTableRow: FC<Props> = ({ dateId,alcoholCheck, users }) => {
   const [isAlcoholCheck, setIsAlcoholCheck] = useState(false);
   const session = useSession();
   const currentUser = session.data?.user.uid;
@@ -49,6 +50,7 @@ const AlcoholCheckFindOneTableRow: FC<Props> = ({ alcoholCheck, users }) => {
         <Table.Td>
           <AlcoholCheckFindOneModal
             defaultValues={alcoholCheck}
+            dateId={dateId}
             postId={alcoholCheck.id}
           />
         </Table.Td>

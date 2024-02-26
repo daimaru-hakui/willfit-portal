@@ -16,16 +16,16 @@ import { db } from "@/lib/firebase/client";
 import { AlcoholCheck, User } from "@/type";
 
 const AlcoholCheckFindOneTable: FC = () => {
-  const { id }:{id:string}= useParams();
+  const { dateId }:{dateId:string}= useParams();
   const [alcoholChecks, setAlcoholChecks] = useState<AlcoholCheck[]>([]);
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!dateId) return;
     const coll = collection(db, "alcoholCheckData");
     const q = query(
       coll,
-      where("date", "==", id),
+      where("date", "==", dateId),
       orderBy("createdAt", "desc")
     );
     onSnapshot(q, (snapshot) =>
@@ -35,7 +35,7 @@ const AlcoholCheckFindOneTable: FC = () => {
         )
       )
     );
-  }, [id]);
+  }, [dateId]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -63,6 +63,7 @@ const AlcoholCheckFindOneTable: FC = () => {
         {alcoholChecks.map((alcoholCheck) => (
           <AlcoholCheckFindOneTableRow
             key={alcoholCheck.id}
+            dateId={dateId}
             alcoholCheck={alcoholCheck}
             users={users}
           />

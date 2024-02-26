@@ -1,5 +1,5 @@
 "use client";
-import { Button, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import AlcoholCheckTableRow from "./alcohol-check-table-row";
 import {
@@ -46,8 +46,11 @@ const AlcoholCheckTable = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {alcoholChecks.map((alcoholCheck:any) => (
-          <AlcoholCheckTableRow key={alcoholCheck.id} alcoholCheck={alcoholCheck}/>
+        {alcoholChecks.map((alcoholCheck: any) => (
+          <AlcoholCheckTableRow
+            key={alcoholCheck.id}
+            alcoholCheck={alcoholCheck}
+          />
         ))}
       </Table.Tbody>
     </Table>

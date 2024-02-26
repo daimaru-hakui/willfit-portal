@@ -2,7 +2,9 @@
 import React, { FC, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
+  addDoc,
   arrayUnion,
+  collection,
   doc,
   getDoc,
   serverTimestamp,
@@ -20,15 +22,17 @@ interface Props {
   defaultValues: AlcoholCheckInputs;
   pageType: "NEW" | "EDIT";
   dateId?: string;
+  postId?: string;
   userId?: string;
 }
 
-const AlcoholCheckForm: FC<Props> = ({
+const AlcoholCheckForm2: FC<Props> = ({
   close,
   defaultValues,
   pageType,
   dateId,
-  userId,
+  postId,
+  userId
 }) => {
   const [alchoolCheckValue, setAlcholCheckValue] = useState<string | number>(
     defaultValues.alcoholCheckValue
@@ -37,11 +41,7 @@ const AlcoholCheckForm: FC<Props> = ({
   const session = useSession();
   const currentUser = session.data?.user.uid;
   const { register, handleSubmit } = useForm<AlcoholCheckInputs>({
-    defaultValues: {
-      ...defaultValues,
-      alcoholCheck1: String(defaultValues.alcoholCheck1),
-      alcoholCheck2: String(defaultValues.alcoholCheck2),
-    },
+    defaultValues,
   });
   const onSubmit: SubmitHandler<AlcoholCheckInputs> = async (data) => {
     switch (pageType) {
@@ -79,6 +79,14 @@ const AlcoholCheckForm: FC<Props> = ({
   };
 
   const addAlcoholCheckData = async (data: AlcoholCheckInputs) => {
+    await addDoc(collection(db, "alcoholCheckData"), {
+      date: todayDate,
+      uid: currentUser,
+      createdAt: serverTimestamp(),
+      alcoholCheck1: data.alcoholCheck1,
+      alcoholCheck2: data.alcoholCheck2,
+      alcoholCheckValue: alchoolCheckValue || 0,
+    });
     // 2024年度以降
     const userRef = doc(db, "users", currentUser as string);
     await setDoc(
@@ -102,17 +110,11 @@ const AlcoholCheckForm: FC<Props> = ({
   };
 
   const updateAlcoholCheckData = async (data: AlcoholCheckInputs) => {
-    if (!dateId) return;
-    const documentRef = doc(
-      db,
-      "alcoholCheckList",
-      `${dateId}`,
-      "alcoholCheckData",
-      `${userId}`
-    );
-    updateDoc(documentRef, {
-      alcoholCheck1: Number(data.alcoholCheck1),
-      alcoholCheck2: Number(data.alcoholCheck2),
+    if (!postId) return;
+    const docRef = doc(db, "alcoholCheckData", `${postId}`);
+    updateDoc(docRef, {
+      alcoholCheck1: data.alcoholCheck1,
+      alcoholCheck2: data.alcoholCheck2,
       alcoholCheckValue: Number(alchoolCheckValue) || 0,
       updatedAt: serverTimestamp(),
     });
@@ -176,4 +178,4 @@ const AlcoholCheckForm: FC<Props> = ({
   );
 };
 
-export default AlcoholCheckForm;
+export default AlcoholCheckForm2;
