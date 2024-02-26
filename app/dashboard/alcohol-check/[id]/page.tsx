@@ -1,5 +1,5 @@
 import React from "react";
-import AlcoholCheckFindOneTable from "./components/alcohol-check-find-one-table";
+import AlcoholCheckFindOneTable from "../../../../components/alcohol-check/alcohol-check-find-one-table";
 import { Paper } from "@mantine/core";
 
 const AlcoholCheckId = () => {

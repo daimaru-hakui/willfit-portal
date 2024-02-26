@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
 import { Box, Flex, Paper } from "@mantine/core";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
@@ -28,6 +28,23 @@ const AlcoholCheckArea: FC = () => {
       );
     });
   }, [currentUser, todayDate]);
+
+  useEffect(() => {
+    console.log("users");
+    if (currentUser) {
+      const docRef = doc(db, "authority", `${currentUser}`);
+      const userRef = doc(db, "users", `${currentUser}`);
+      const addAuthority = async () => {
+        const docSnap = await getDoc(docRef);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) return;
+        await setDoc(userRef, {
+          ...docSnap.data(),
+        });
+      };
+      addAuthority();
+    }
+  }, [currentUser]);
 
   return (
     <>

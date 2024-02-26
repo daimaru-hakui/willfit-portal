@@ -2,7 +2,7 @@
 import { useDisclosure } from "@mantine/hooks";
 import React, { FC } from "react";
 import { Modal, Button } from "@mantine/core";
-import AlcoholCheckForm from "../../components/alcohol-check-form";
+import AlcoholCheckForm from "./alcohol-check-form";
 import { AlcoholCheckInputs } from "@/type";
 
 interface Props {
@@ -23,7 +23,7 @@ const AlcoholCheckFindOneModal: FC<Props> = ({ defaultValues, postId }) => {
           postId={postId}
         />
       </Modal>
-
+      
       <Button size="xs" onClick={open}>編集</Button>
     </>
   );

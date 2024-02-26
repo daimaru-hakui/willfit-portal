@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Paper } from "@mantine/core";
-import QuickAccessForm from "../components/quick-access-form";
+import QuickAccessForm from "@/components/quick-access/quick-access-form";
 
 const QuickAccessById = () => {
   const defaultValues = {

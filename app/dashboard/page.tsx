@@ -1,8 +1,8 @@
 import { Flex, Box, Paper } from "@mantine/core";
-import AlcoholCheckArea from "./alcohol-check/components/alcohol-check-area";
+import AlcoholCheckArea from "../../components/alcohol-check/alcohol-check-area";
 import { Container } from "@mantine/core";
-import NewsToppageArea from "./news/components/news-toppage-area";
-import QuickAccessToppageArea from "./quick-access/components/quick-access-toppage-area";
+import NewsToppageArea from "@/components/news/news-toppage-area";
+import QuickAccessToppageArea from "@/components/quick-access/quick-access-toppage-area";
 
 const Dashboard = async () => {
   return (

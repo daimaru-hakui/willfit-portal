@@ -1,6 +1,6 @@
 import { Container } from "@mantine/core";
 import React from "react";
-import NewsArea from "./components/news-area";
+import NewsArea from "@/components/news/news-area";
 
 const NewsPage = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import QuickAccessArea from "./components/quick-access-area";
+import QuickAccessArea from "@/components/quick-access/quick-access-area";
 import { Container } from "@mantine/core";
 
 const QuickAccess = () => {

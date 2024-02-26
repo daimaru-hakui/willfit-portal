@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import NavBar from "../components/nav-bar";
+import NavBar from "../../components/nav-bar";
 import { Box, Flex } from "@mantine/core";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
 import { useSession } from "next-auth/react";
 import { User } from "@/type";
 import { useRouter } from "next/navigation";
-import Loading from "../components/loading";
+import Loading from "@/components/loading";
 
 export default function DashboardLayout({
   children,
