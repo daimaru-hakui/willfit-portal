@@ -91,6 +91,7 @@ const AlcoholCheckForm: FC<Props> = ({
     // });
     // 2024年度以降
     const userRef = doc(db, "users", currentUser as string);
+    const user = await getDoc(userRef);
     await setDoc(
       doc(
         db,
@@ -107,6 +108,7 @@ const AlcoholCheckForm: FC<Props> = ({
         alcoholCheck2: Number(data.alcoholCheck2),
         alcoholCheckValue: Number(alchoolCheckValue) || 0,
         userRef,
+        username: user?.data()?.name || "",
       }
     );
   };
