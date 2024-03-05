@@ -11,6 +11,7 @@ export type AlcoholCheck = {
   alcoholCheckValue: number;
   date: string;
   uid: string;
+  username:string
   createdAt: any;
   updatedAt: any;
 };

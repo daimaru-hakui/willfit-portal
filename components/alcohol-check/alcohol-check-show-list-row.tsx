@@ -1,18 +1,18 @@
 "use client";
-import { AlcoholCheck, User } from "@/type";
+import { AlcoholCheck } from "@/type";
 import { Table } from "@mantine/core";
 import { format } from "date-fns";
 import React, { FC } from "react";
 import AlcoholCheckEditModal from "./alcohol-check-edit-modal";
 
 interface Props {
-  alcoholCheck: AlcoholCheck & { user: User };
+  alcoholCheck: AlcoholCheck ;
 }
 
 const AlcoholCheckShowListRow: FC<Props> = ({ alcoholCheck }) => {
   return (
     <Table.Tr>
-      <Table.Td>{alcoholCheck?.user?.name}</Table.Td>
+      <Table.Td>{alcoholCheck?.username}</Table.Td>
       <Table.Td ta="center">
         {Number(alcoholCheck.alcoholCheck1) === 1 ? "済" : "未"}
       </Table.Td>

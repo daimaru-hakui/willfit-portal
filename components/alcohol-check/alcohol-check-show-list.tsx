@@ -4,7 +4,6 @@ import React, { FC, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   collection,
-  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -19,9 +18,7 @@ import AlcoholCheckShowOldListRow from "./alcohol-check-show-old-list-row";
 const AlcoholCheckShowList: FC = () => {
   const { dateId }: { dateId: string } = useParams();
   const [users, setUsers] = useState<User[]>([]);
-  const [alcoholChecks, setAlcoholChecks] = useState<
-    (AlcoholCheck & { user: User })[]
-  >([]);
+  const [alcoholChecks, setAlcoholChecks] = useState<AlcoholCheck[]>([]);
   const [oldAlcoholChecks, setOldAlcoholChecks] = useState<AlcoholCheck[]>([]);
 
   useEffect(() => {
@@ -30,15 +27,12 @@ const AlcoholCheckShowList: FC = () => {
     const q = query(coll, orderBy("createdAt", "desc"));
 
     onSnapshot(q, async (snapshot) => {
-      let data: (AlcoholCheck & { user: User })[] = [];
+      let data: AlcoholCheck[] = [];
       for await (let doc of snapshot.docs) {
-        if (!doc.data().userRef) return;
-        const user = await getDoc(await doc.data().userRef);
         data.push({
           ...doc.data(),
           id: doc.id,
-          user: user?.data(),
-        } as AlcoholCheck & { user: User });
+        } as AlcoholCheck);
       }
       setAlcoholChecks(data);
     });
@@ -71,7 +65,7 @@ const AlcoholCheckShowList: FC = () => {
   }, []);
 
   return (
-    <Table w="100%">
+    <Table w="100%" mt={6}>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>名前</Table.Th>

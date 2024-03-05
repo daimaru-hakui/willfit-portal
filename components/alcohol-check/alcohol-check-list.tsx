@@ -37,7 +37,7 @@ const AlcoholCheckList = () => {
   }, []);
 
   return (
-    <Table>
+    <Table mt="md">
       <Table.Thead>
         <Table.Tr>
           <Table.Th>日付</Table.Th>
