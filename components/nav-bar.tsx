@@ -43,7 +43,7 @@ const NavBar: FC = () => {
           <Flex gap={12} display={{ base: "none", sm: "flex" }}>
             {isDaimaru && (
               <Link
-                href={`https://daimaru-portal.vercel.app/`}
+                href={`https://daimaru-portal-site.vercel.app/`}
                 rel="noopener noreferrer"
               >
                 <Button
